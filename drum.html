@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drum Gallery</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff6f6, #e6e6fa);
+      border: 12px solid;
+      border-image: linear-gradient(to right, black, red, yellow) 1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 1.2rem 2rem;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      margin: 0 auto;
+      font-size: 2rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .cart {
+      font-size: 1.2rem;
+      cursor: pointer;
+      position: relative;
+      margin-left: auto;
+    }
+
+    .cart span {
+      position: absolute;
+      top: -10px;
+      right: -15px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+    }
+
+    .gallery-title {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 3rem;
+      color: #333;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff8a00; }
+      to { text-shadow: 0 0 20px #ff0080; }
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      animation: flyIn 1s ease forwards;
+    }
+
+    .card:hover {
+      transform: scale(1.07);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0.5rem 0;
+      color: #333;
+    }
+
+    .card p {
+      color: #777;
+      font-weight: bold;
+    }
+
+    .card button {
+      margin: 0.3rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .buy {
+      background: #ff8a00;
+      color: white;
+    }
+
+    .buy:hover {
+      background: #e67300;
+    }
+
+    .add {
+      background: #00b894;
+      color: white;
+    }
+
+    .add:hover {
+      background: #00997a;
+    }
+
+    @keyframes flyIn {
+      0% {
+        transform: translateY(200px) rotate(90deg);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .back-button {
+      position: fixed;
+      top: 90px;
+      left: 20px;
+      z-index: 999;
+      background: linear-gradient(to right, #ff8a00, #ff0080);
+      color: white;
+      font-size: 1.1rem;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: pulse 1.5s infinite;
+    }
+
+    .back-button:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #ff8a00; }
+      50% { box-shadow: 0 0 20px #ff0080; }
+      100% { box-shadow: 0 0 10px #ff8a00; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="cartSound" src="cart-sound.mp3" preload="auto"></audio>
+
+  <button class="back-button" onclick="window.location.href='index.html'">🎵 Back</button>
+
+  <div class="header">
+    <h1>🥁 Drum Gallery</h1>
+    <div class="cart" onclick="playCartSound()">
+      🛒 Cart <span id="cartCount">0</span>
+    </div>
+  </div>
+
+  <h2 class="gallery-title">Explore Our Drum Collection</h2>
+
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    const drums = [
+      { name: "Roland VAD507", price: "₹95,000", img: "https://www.bajaao.com/cdn/shop/files/roland-acoustic_-drum-kits-roland-vad507-v-drums-acoustic-drum-set-33851018051763.jpg?v=1741438110" },
+      { name: "Standard Drum Kit", price: "₹55,000", img: "https://www.musicca.com/files/scripts/drums/static/media/drum-kit-standard.eb6cdcf0e2d2b6c360fb.png" },
+      { name: "Donner Kids Drum Set", price: "₹14,500", img: "https://images-cdn.ubuy.co.in/672f4c39566f46701c4a74bd-donner-kids-size-drums-sets-14-5-piece.jpg" },
+      { name: "Compact Red Set", price: "₹25,000", img: "https://5.imimg.com/data5/VR/GN/ZV/SELLER-45617577/drum-set-500x500.jpg" },
+      { name: "VQD106 Full Kit", price: "₹38,000", img: "https://drumfactory.com.au/cdn/shop/files/VQD106_F.jpg?v=1727420706" },
+      { name: "Roland Practice Kit", price: "₹42,999", img: "https://rolandcorp.com.au/blog/wp-content/uploads/2017/04/DrumQA_feature.jpg" },
+      { name: "Dream Kit", price: "₹64,900", img: "https://assets.xlnaudio.com/pages/addictive_drums/2.5/dream-kit-bg-with-transition-1352px-2x.jpg" },
+      { name: "TD716 Digital Kit", price: "₹89,999", img: "https://www.worldofmusic.com.au/wp-content/uploads/2024/09/Roland-TD716-VDrums-Digitial-Drumkit-Angle.jpg" },
+      { name: "Live Rock Set", price: "₹50,000", img: "https://playdixon.com/wp-content/uploads/2019/01/LR-OG.jpg" },
+      { name: "Solo Pro Kit", price: "₹59,500", img: "https://drumhelper.b-cdn.net/wp-content/uploads/2024/02/How-to-Play-a-Drum-Solo-1024x640.jpg" },
+      { name: "Yamaha Washi", price: "₹72,000", img: "https://cdn.webshopapp.com/shops/321836/files/450092264/400x210x1/yamaha-washi.jpg" },
+      { name: "Virtual Drum Pro", price: "₹29,999", img: "https://virtualpiano.net/wp-content/uploads/2020/08/Play-Drums-Online-on-Virtual-Piano.jpg" }
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const cartCount = document.getElementById("cartCount");
+    let cart = 0;
+
+    drums.forEach((drum, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.innerHTML = `
+        <img src="${drum.img}" alt="${drum.name}" />
+        <h3>${drum.name}</h3>
+        <p>${drum.price}</p>
+        <button class="buy" onclick="window.location.href='buynow.html?from=drum'">Buy Now</button>
+        <button class="add" onclick="addToCart()">Add to Cart</button>
+      `;
+      gallery.appendChild(card);
+    });
+
+    function addToCart() {
+      cart++;
+      cartCount.textContent = cart;
+      playCartSound();
+    }
+
+    function playCartSound() {
+      const sound = document.getElementById('cartSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+  </script>
+</body>
+</html>

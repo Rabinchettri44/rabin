@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Glowing Animated Login Form</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: url("https://codingstella.com/wp-content/uploads/2024/01/download-6-scaled.jpeg") no-repeat center center/cover;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 1.2rem;
+      opacity: 0.4;
+      animation: floatEmoji 15s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatEmoji {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+      }
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 15px;
+      border: 10px solid transparent;
+      border-image: linear-gradient(45deg, yellow, orange, red, black) 1;
+      border-radius: 25px;
+      pointer-events: none;
+    }
+
+    audio {
+      display: none;
+    }
+
+    @property --a {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    .box {
+      position: relative;
+      width: 400px;
+      height: 200px;
+      background: repeating-conic-gradient(from var(--a), #ff2770 0%, #ff2770 5%, transparent 5%, transparent 40%, #ff2770 50%);
+      filter: drop-shadow(0 15px 50px #000);
+      animation: rotating 4s linear infinite;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.5s;
+      animation: flyIn 2s ease forwards;
+      opacity: 0;
+      transform: translateY(-100px);
+    }
+
+    @keyframes flyIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .box:hover {
+      width: 450px;
+      height: 600px;
+    }
+
+    @keyframes rotating {
+      0% { --a: 0deg; }
+      100% { --a: 360deg; }
+    }
+
+    .box::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: repeating-conic-gradient(from var(--a), #45f3ff 0%, #45f3ff 5%, transparent 5%, transparent 40%, #45f3ff 50%);
+      filter: drop-shadow(0 15px 50px #000);
+      border-radius: 20px;
+      animation: rotating 4s linear infinite;
+      animation-delay: -1s;
+    }
+
+    .box::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      background: #2d2d39;
+      border-radius: 15px;
+      border: 8px solid #25252b;
+    }
+
+    .login {
+      position: absolute;
+      inset: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+      flex-direction: column;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.5);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+      color: #fff;
+      overflow-y: auto;
+    }
+
+    .login::-webkit-scrollbar {
+      width: 0;
+    }
+
+    .login.show-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .login.show-scroll::-webkit-scrollbar-track {
+      background: #1e1e2a;
+    }
+
+    .login.show-scroll::-webkit-scrollbar-thumb {
+      background: #45f3ff;
+      border-radius: 10px;
+    }
+
+    .box:hover .login {
+      inset: 40px;
+    }
+
+    .formBox {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      width: 70%;
+      max-height: 100%;
+      padding-right: 5px;
+    }
+
+    .formBox.active {
+      display: flex;
+    }
+
+    .formBox h2 {
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .formBox h2 i {
+      color: #ff2770;
+      text-shadow: 0 0 5px #ff2770, 0 0 30px #ff2770;
+      margin: 0 5px;
+    }
+
+    .formBox input,
+    .formBox select {
+      width: 100%;
+      padding: 8px 18px;
+      outline: none;
+      font-size: 1em;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.1);
+      border: 2px solid #fff;
+      border-radius: 30px;
+    }
+
+    .formBox input::placeholder {
+      color: #999;
+    }
+
+    .formBox input[type="submit"] {
+      background: #45f3ff;
+      border: none;
+      font-weight: 500;
+      color: #111;
+      cursor: pointer;
+      transition: 0.5s;
+    }
+
+    .formBox input[type="submit"]:hover {
+      box-shadow: 0 0 10px #45f3ff, 0 0 60px #45f3ff;
+    }
+
+    .group {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .group a {
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .group a:nth-child(2) {
+      color: #ff2770;
+      font-weight: 600;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      color: #45f3ff;
+      font-size: 0.9em;
+      text-decoration: underline;
+    }
+
+    .social-login {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .social-login button {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 0.9em;
+      border: none;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .google {
+      background: #db4437;
+    }
+
+    .facebook {
+      background: #4267B2;
+    }
+  </style>
+</head>
+<body>
+
+<audio autoplay loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-dubstep.mp3" type="audio/mp3">
+</audio>
+
+<script>
+  const emojis = ["🎵", "🎶", "🎷", "🎺", "🎸", "🎹"];
+  for (let i = 0; i < 20; i++) {
+    const span = document.createElement("span");
+    span.className = "emoji";
+    span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    span.style.left = Math.random() * 100 + "vw";
+    span.style.animationDelay = Math.random() * 20 + "s";
+    document.body.appendChild(span);
+  }
+
+  function showForm(formId) {
+    document.querySelectorAll('.formBox').forEach(form => form.classList.remove('active'));
+    document.getElementById(formId + 'Form').classList.add('active');
+
+    const loginContainer = document.querySelector('.login');
+    if (formId === 'signup') {
+      loginContainer.classList.add('show-scroll');
+    } else {
+      loginContainer.classList.remove('show-scroll');
+    }
+  }
+
+  function loginWith(platform) {
+    alert(`Logged in with ${platform}`);
+    window.location.href = "index.html";
+  }
+
+  function handleLogin(event) {
+    event.preventDefault();
+    alert("Login successful!");
+    window.location.href = "index.html";
+  }
+
+  function handleSignup(event) {
+    event.preventDefault();
+
+    const password = document.querySelector('input[name="password"]').value;
+    const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
+
+    // Password validation
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long!");
+      return;
+    }
+
+    // After successful signup, redirect to index.html
+    alert("Signup successful!");
+    window.location.href = "index.html";  // Redirect to index.html after successful signup
+  }
+</script>
+
+<div class="box">
+  <div class="login">
+
+    <!-- LOGIN FORM -->
+    <form class="formBox active" id="loginForm" onsubmit="return handleLogin(event)">
+      <h2><i class="fa-solid fa-right-to-bracket"></i> Login <i class="fa-solid fa-heart"></i></h2>
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input type="submit" value="Sign in" />
+      <div class="group">
+        <a onclick="showForm('forgot')">Forgot Password</a>
+        <a onclick="showForm('signup')">Sign up</a>
+      </div>
+      <div class="social-login">
+        <button class="google" type="button" onclick="loginWith('Google')"><i class="fa-brands fa-google"></i> Google</button>
+        <button class="facebook" type="button" onclick="loginWith('Facebook')"><i class="fa-brands fa-facebook-f"></i> Facebook</button>
+      </div>
+    </form>
+
+    <!-- FORGOT FORM -->
+    <form class="formBox" id="forgotForm" onsubmit="return false;">
+      <h2><i class="fa-solid fa-lock"></i> Reset Password</h2>
+      <input type="text" name="recovery" placeholder="Enter Email or Phone" required>
+      <input type="text" name="otp" placeholder="Enter OTP" required>
+      <input type="submit" value="Verify" />
+      <div class="back-link" onclick="showForm('login')">← Back to Login</div>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form class="formBox" id="signupForm" onsubmit="return handleSignup(event)">
+      <h2><i class="fa-solid fa-user-plus"></i> Sign Up</h2>
+      <input type="text" name="firstName" placeholder="First Name" required />
+      <input type="text" name="lastName" placeholder="Last Name" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="tel" name="phone" placeholder="Phone Number" required />
+      <input type="number" name="age" placeholder="Age" required />
+      <select name="gender" required>
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <input type="submit" value="Sign Up" />
+      <div class="back-link" onclick="showForm('login')">← Back to Login</div>
+    </form>
+
+  </div>
+</div>
+</body>
+</html>

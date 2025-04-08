@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy Now</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://cdn.fstoppers.com/styles/xlarge/s3/media/2018/03/20/guitar-photography-dusty-wooddell-fender-stratocaster.jpg') no-repeat center center fixed;
+      background-size: cover;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.8); /* Transparent background for the container */
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      animation: slideUp 1s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: #ff5e57;
+      color: #fff;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .back-button:hover {
+      background: #e04b44;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+      background: #f1f1f1;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      border: 3px solid #ff5e57;
+      opacity: 0.8;
+    }
+
+    .payment-option:hover {
+      background: #e0e0ff;
+      transform: scale(1.05);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      opacity: 1;
+    }
+
+    .payment-option input[type="radio"] {
+      margin-right: 20px;
+      transform: scale(1.5);
+    }
+
+    .payment-option img {
+      width: 80px;
+      height: 80px;
+      margin-right: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .payment-option.selected {
+      border: 3px solid #00c853;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    }
+
+    .payment-option.selected img {
+      transform: scale(1.2);
+    }
+
+    .upi-entry {
+      margin-top: 10px;
+      margin-left: 45px;
+      display: none;
+    }
+
+    .upi-entry input {
+      width: calc(100% - 50px);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .continue-btn {
+      display: block;
+      margin-top: 30px;
+      padding: 15px 30px;
+      background: #57c957;
+      color: #fff;
+      border-radius: 50px;
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .continue-btn:hover {
+      background: #4fa74f;
+      transform: scale(1.05);
+    }
+
+    .thank-you-message {
+      display: none;
+      font-size: 40px;
+      font-weight: bold;
+      color: black;
+      text-align: center;
+      margin-top: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: glow 1.5s infinite alternate, slideUp 1s ease;
+      text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green;
+      border: 4px solid red;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    @keyframes glow {
+      0% {
+        text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green;
+      }
+      50% {
+        text-shadow: 0 0 20px red, 0 0 40px red, 0 0 60px red;
+      }
+      100% {
+        text-shadow: 0 0 10px green, 0 0 20px green, 0 0 30px green;
+      }
+    }
+
+    /* Music Animation */
+    .music-wave {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 80px;
+      color: #fff;
+      opacity: 0;
+      animation: musicWave 1.5s ease-out forwards;
+    }
+
+    @keyframes musicWave {
+      0% {
+        opacity: 0;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.5);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(2);
+      }
+    }
+
+    /* For Special Effects After Clicking Continue */
+    .payment-confirmation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 48px;
+      font-weight: bold;
+      text-align: center;
+      z-index: 9999;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a id="back-btn" class="back-button">&larr; Back</a>
+    <h2>Select Payment Method</h2>
+
+    <label class="payment-option" id="gpay">
+      <input type="radio" name="payment" />
+      <img src="https://static.vecteezy.com/system/resources/previews/046/861/640/non_2x/google-pay-logo-transparent-background-free-png.png" alt="GPay" />
+      <span>Google Pay (GPay)</span>
+    </label>
+
+    <label class="payment-option" id="paytm">
+      <input type="radio" name="payment" />
+      <img src="./paytm.png" alt="Paytm" />
+      <span>Paytm</span>
+    </label>
+
+    <label class="payment-option" id="credit-card">
+      <input type="radio" name="payment" />
+      <img src="./credit-card.png" alt="Card" />
+      <span>Credit / Debit Card</span>
+    </label>
+
+    <label class="payment-option" id="cod">
+      <input type="radio" name="payment" />
+      <img src="cash-payment.png" alt="COD" />
+      <span>Cash on Delivery</span>
+    </label>
+
+    <label class="payment-option" id="upi">
+      <input type="radio" name="payment" />
+      <img src="https://t3.ftcdn.net/jpg/05/60/50/16/360_F_560501607_x7crxqBWbmbgK2k8zOL0gICbIbK9hP6y.jpg" alt="UPI" />
+      <span>UPI</span>
+    </label>
+    <div class="upi-entry">
+      <input type="text" placeholder="Enter your UPI ID" />
+    </div>
+
+    <button class="continue-btn" id="continue-btn">Continue</button>
+  </div>
+
+  <div id="confirmation-message" class="thank-you-message">
+    Thank You! Your Order Has Been Confirmed.
+  </div>
+
+  <div class="confirmation-logo" id="confirmation-logo"></div>
+
+  <div id="music-wave" class="music-wave">🎶</div>
+ 
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromPage = urlParams.get("from");
+      const backBtn = document.getElementById("back-btn");
+      backBtn.href = fromPage ? `${fromPage}.html` : "index.html";
+
+      const continueBtn = document.getElementById("continue-btn");
+      const upiEntry = document.querySelector('.upi-entry');
+      const confirmationMessage = document.getElementById("confirmation-message");
+      const confirmationLogo = document.getElementById("confirmation-logo");
+      const musicWave = document.getElementById("music-wave");
+
+      const paymentOptions = document.querySelectorAll('.payment-option');
+
+      paymentOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          paymentOptions.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          if (option.id === 'upi') {
+            upiEntry.style.display = 'block';
+          } else {
+            upiEntry.style.display = 'none';
+          }
+        });
+      });
+
+      continueBtn.addEventListener("click", () => {
+        const selectedPaymentOption = document.querySelector('input[name="payment"]:checked');
+        if (selectedPaymentOption) {
+          // Show confirmation message
+          confirmationMessage.style.display = "block";
+          confirmationLogo.style.display = "block";
+          musicWave.style.display = "block";
+          
+          // Hide the payment options
+          document.querySelector('.container').style.display = "none";
+
+          // Optional: Add more fun animations, like a glowing effect or sound
+          setTimeout(() => {
+            confirmationMessage.style.display = "none"; 
+            musicWave.style.display = "none";
+          }, 5000); // Hide after 5 seconds (you can adjust this)
+        }
+      });
+    });
+  </script>
+</body>
+</html>

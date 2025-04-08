@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Kesang Musicals</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 0;
+            background-color: #444;  /* Changed header color */
+            color: #ffcc00;  /* Gold color for 'Kesang Musicals' text */
+            position: relative;
+            animation: headerAnimation 1s ease-out;
+        }
+
+        @keyframes headerAnimation {
+            0% { opacity: 0; transform: translateY(-50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        header h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .social-icons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            font-size: 24px;
+            color: #fff;
+            text-decoration: none;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.1);
+            color: #ffcc00;  /* Gold color on hover */
+        }
+
+        .social-icons img {
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons img:hover {
+            transform: scale(1.2);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #555;
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .about-content h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .about-content p {
+            line-height: 1.6;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .image-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .info-section div {
+            width: 30%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #333;
+        }
+
+        .info-section h3 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .logo-section img {
+            width: 150px;
+            height: auto;
+            margin-top: 20px;
+        }
+
+        /* Left and Right Space Fill */
+        .fill-left, .fill-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 25%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        .fill-left {
+            left: 0;
+            background-image: url('https://content.jdmagicbox.com/comp/def_content/musical_instrument_dealers/default-musical-instrument-dealers-1.jpg?w=1200');
+        }
+
+        .fill-right {
+            right: 0;
+            background-image: url('https://imgstaticcontent.lbb.in/lbbnew/wp-content/uploads/sites/1/2017/09/21105618/210917musicstores_06.jpg?w=1200&h=628&fill=blur&fit=fill');
+        }
+
+        /* Additional Div Containers for Filling */
+        .additional-image-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            top: 0;
+            margin-top: -5%;
+        }
+
+        .additional-image-container div {
+            width: 48%;
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .additional-image-container div:hover {
+            transform: scale(1.05);
+        }
+
+        .image-one {
+            background-image: url('https://images.guitarguitar.co.uk/cdn/small/130/Camden3.jpg?w=1200');
+        }
+
+        .image-two {
+            background-image: url('https://www.schmittmusic.com/cdn/shop/files/fargo-piano-showroom-16.9.jpg?v=1720979179&width=1400');
+        }
+
+        .final-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .final-section div {
+            width: 40%;
+            padding: 20px;
+            color: #333;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .final-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .final-section p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Back button links to index.html -->
+<button class="back-btn" onclick="window.location.href='index.html'">Back to Home</button>
+
+<header>
+  <button class="back-btn" onclick="window.location.href='index.html'">Back to Home</button>
+
+    <h1>Kesang Musicals</h1>
+    <div class="social-icons">
+        <a href="https://www.facebook.com/kesangmusicals" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+        <a href="https://www.instagram.com/kesangmusicals" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" alt="Instagram"></a>
+ 
+        <a href="https://www.whatsapp.com/kesangmusicals" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" alt="WhatsApp"></a>
+    </div>
+</header>
+
+<!-- Left and Right Space Fill -->
+<div class="fill-left"></div>
+<div class="fill-right"></div>
+
+<div class="about-content">
+    <h1>With an immense experience of more than 60 years in the field of music, we feel proud to introduce ourselves as the most professionally steered manufacturer and exporter providing all types of high-quality musical instruments for sale in India and abroad.</h1>
+
+    <p>Kesang Musicals is a state-of-the-art unit having professional infrastructure offering all types of musical instruments.</p>
+
+    <p>Kesang Musicals was established by Late Sh.Hans Raj, who initiated the work in the field of making musical instruments in 1945 in his uncle's workshop at Lahore. He commenced his own business in 1962 from a small shop at New Delhi. S. Raj and Sanjeev, both the sons joined their father at teenage along with concentrating on their education, have now 30 years of vast experience in the field of musical instruments and leading the organization to amazing heights.</p>
+
+    <p>Presently we possess one of the biggest showrooms in New Delhi offering all types of musical instruments and pro audio equipment. We deal in Acoustic and electric Guitars, Keyboards, Drum sets, Amplifiers, effect processors etc. of various world-famous brands like Yamaha, Roland, Fender, Ibanez, Casio, Marshall, Zoom, Boss, Givson, gb&a, Premier, D'addario, Rode, Behringer, M-audio, Samson etc.</p>
+
+    <p>We have our own well-equipped workshop and a perfectly orchestrated team of skilled professionals to design and develop unique professional instruments. We are the most professional manufacturer and exporter of Indian musical instruments like Harmonium, Sitar, Tabla, Dilruba, Taus, Rabab, Sarod, Sarangi, Santoor, Tanpura, Swarmandal, Dhol, Dholak etc.</p>
+
+    <div class="additional-image-container">
+        <div class="image-one"></div>
+        <div class="image-two"></div>
+    </div>
+
+    <div class="image-gallery">
+        <img src="https://content.jdmagicbox.com/comp/def_content/musical_instrument_dealers/default-musical-instrument-dealers-1.jpg" alt="Musical Instruments">
+        <img src="https://imgstaticcontent.lbb.in/lbbnew/wp-content/uploads/sites/1/2017/09/21105618/210917musicstores_06.jpg?w=1200&h=628&fill=blur&fit=fill" alt="Musical Store">
+        <img src="https://images.guitarguitar.co.uk/cdn/small/130/Camden3.jpg?w=1200" alt="Guitar Store">
+    </div>
+
+    <div class="info-section">
+        <div>
+            <h3>Our Instruments</h3>
+            <p>We offer a wide range of high-quality musical instruments that meet the needs of both beginners and professionals.</p>
+        </div>
+        <div>
+            <h3>Expert Craftsmanship</h3>
+            <p>Our instruments are crafted with precision and passion by skilled artisans, ensuring unmatched quality and performance.</p>
+        </div>
+        <div>
+            <h3>Global Reach</h3>
+            <p>Kesang Musicals exports musical instruments worldwide, making high-quality craftsmanship accessible globally.</p>
+        </div>
+    </div>
+
+    <div class="final-section">
+        <div>
+            <h2>Join Our Musical Journey</h2>
+            <p>Explore our products, connect with experts, and experience the magic of music at Kesang Musicals!</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

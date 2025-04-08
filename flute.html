@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flute Gallery</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      border: 12px solid;
+      border-image: linear-gradient(to right, black, red, yellow) 1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 1.2rem 2rem;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      margin: 0 auto;
+      font-size: 2rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .cart {
+      font-size: 1.2rem;
+      cursor: pointer;
+      position: relative;
+      margin-left: auto;
+    }
+
+    .cart span {
+      position: absolute;
+      top: -10px;
+      right: -15px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+    }
+
+    .gallery-title {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 3rem;
+      color: #333;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff8a00; }
+      to { text-shadow: 0 0 20px #ff0080; }
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.4s ease;
+      animation: flyIn 1s ease forwards;
+    }
+
+    .card:hover {
+      transform: scale(1.05) rotate(-2deg);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0.5rem 0;
+      color: #333;
+    }
+
+    .card p {
+      color: #777;
+      font-weight: bold;
+    }
+
+    .card button {
+      margin: 0.3rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .buy {
+      background: #ff8a00;
+      color: white;
+    }
+
+    .buy:hover {
+      background: #e67300;
+    }
+
+    .add {
+      background: #00b894;
+      color: white;
+    }
+
+    .add:hover {
+      background: #00997a;
+    }
+
+    @keyframes flyIn {
+      0% {
+        transform: translateY(200px) rotate(90deg);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .back-btn {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: #222;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .back-btn:hover {
+      transform: scale(1.1) rotate(-2deg);
+    }
+  </style>
+</head>
+<body>
+  <audio id="cartSound" src="cart-sound.mp3" preload="auto"></audio>
+
+  <div class="header">
+    <h1>🎶 Flute Gallery</h1>
+    <div class="cart" onclick="playCartSound()">
+      🛒 Cart <span id="cartCount">0</span>
+    </div>
+  </div>
+
+  <h2 class="gallery-title">Explore Our Flute Collection</h2>
+
+  <div class="gallery" id="gallery"></div>
+
+  <div class="back-btn" onclick="goBack()">🔙 Back</div>
+
+  <script>
+    const flutes = [
+      { name: "Bamboo Pro", price: "₹4,999", img: "https://punam-flute-live.s3.amazonaws.com/productImage/202110300217/resized_450_450_productImage/202110300216/IMG_0256.jpg" },
+      { name: "Concert Bansuri", price: "₹5,450", img: "https://punam-flute-live.s3.amazonaws.com/productImage/202109245728/resized_450_450_productImage/202109245728/IMG_0250.jpg" },
+      { name: "Studio Flute", price: "₹3,990", img: "https://punam-flute-live.s3.amazonaws.com/productImage/202111091407/resized_450_450_productImage/202111091407/7_flute_4.jpg" },
+      { name: "Amazon Classic", price: "₹2,499", img: "https://m.media-amazon.com/images/I/41KAz78MqTL._AC_UF1000,1000_QL80_.jpg" },
+      { name: "Spiritual Breeze", price: "₹6,200", img: "https://highspirits.com/cdn/shop/files/03_SF113-SPC_04192023.jpg?v=1700091072" },
+      { name: "Cedar G Flute", price: "₹7,000", img: "https://stellarflutes.com/cdn/shop/files/Western_red_cedar_Native_American_style_G_flute_package_by_Stellar_Flutes_-_Close_Up-474746.jpg?v=1730330074&width=2048" },
+      { name: "Ironwood Harmony", price: "₹6,750", img: "https://stellarflutes.com/cdn/shop/files/Iron_stained_cedar_compared_with_natural_unstained_cedar_Stellar_Native_American_style_g_flutes-648317.jpg?v=1730330074&width=2048" },
+      { name: "Classic Recorder", price: "₹3,100", img: "https://www.mercurius-usa.com/media/catalog/product/cache/7d51c522795949c19bbd3e0c53f30920/5/5/55102520_1.jpg" },
+      { name: "Amazon Elegant", price: "₹2,800", img: "https://m.media-amazon.com/images/I/61IBZl5Oa+L._AC_UF1000,1000_QL80_.jpg" },
+      { name: "Walmart Soprano", price: "₹1,999", img: "https://i5.walmartimages.com/asr/eb0fac8b-30aa-4cfc-b48f-ea994b208fc2.323546820eb67521329712d5250b7550.jpeg" },
+      { name: "German Recorder", price: "₹2,600", img: "https://rukminim2.flixcart.com/image/850/1000/xif0q/flute/i/1/f/r-51-descant-soprano-recorder-german-style-c-key-8-holes-music-original-imagnbs3ghb5vhu9.jpeg?q=90&crop=false" },
+      { name: "Pro Musician", price: "₹8,400", img: "https://m.media-amazon.com/images/I/7151dsjFB8L._AC_UF1000,1000_QL80_.jpg" }
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const cartCount = document.getElementById("cartCount");
+    let cart = 0;
+
+    flutes.forEach((flute, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.innerHTML = `
+        <img src="${flute.img}" alt="${flute.name}" />
+        <h3>${flute.name}</h3>
+        <p>${flute.price}</p>
+        <button class="buy" onclick="window.location.href='buynow.html?from=flute'">Buy Now</button>
+        <button class="add" onclick="addToCart()">Add to Cart</button>
+      `;
+      gallery.appendChild(card);
+    });
+
+    function addToCart() {
+      cart++;
+      cartCount.textContent = cart;
+      playCartSound();
+    }
+
+    function playCartSound() {
+      const sound = document.getElementById('cartSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    function goBack() {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Violin Gallery</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff6f6, #e6e6fa);
+      border: 12px solid;
+      border-image: linear-gradient(to right, black, red, yellow) 1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 1.2rem 2rem;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      margin: 0 auto;
+      font-size: 2rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .cart {
+      font-size: 1.2rem;
+      cursor: pointer;
+      position: relative;
+      margin-left: auto;
+    }
+
+    .cart span {
+      position: absolute;
+      top: -10px;
+      right: -15px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+    }
+
+    .gallery-title {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 3rem;
+      color: #333;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff8a00; }
+      to { text-shadow: 0 0 20px #ff0080; }
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      animation: flyIn 1s ease forwards;
+    }
+
+    .card:hover {
+      transform: scale(1.07);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0.5rem 0;
+      color: #333;
+    }
+
+    .card p {
+      color: #777;
+      font-weight: bold;
+    }
+
+    .card button {
+      margin: 0.3rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .buy {
+      background: #ff8a00;
+      color: white;
+    }
+
+    .buy:hover {
+      background: #e67300;
+    }
+
+    .add {
+      background: #00b894;
+      color: white;
+    }
+
+    .add:hover {
+      background: #00997a;
+    }
+
+    @keyframes flyIn {
+      0% {
+        transform: translateY(200px) rotate(90deg);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .back-button {
+      position: fixed;
+      top: 90px;
+      left: 20px;
+      z-index: 999;
+      background: linear-gradient(to right, #ff8a00, #ff0080);
+      color: white;
+      font-size: 1.1rem;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: pulse 1.5s infinite;
+    }
+
+    .back-button:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #ff8a00; }
+      50% { box-shadow: 0 0 20px #ff0080; }
+      100% { box-shadow: 0 0 10px #ff8a00; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="cartSound" src="cart-sound.mp3" preload="auto"></audio>
+
+  <button class="back-button" onclick="window.location.href='index.html'">🎵 Back</button>
+
+  <div class="header">
+    <h1>🎻 Violin Gallery</h1>
+    <div class="cart" onclick="playCartSound()">
+      🛒 Cart <span id="cartCount">0</span>
+    </div>
+  </div>
+
+  <h2 class="gallery-title">Explore Our Violin Collection</h2>
+
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    const violins = [
+      { name: "Violin 1", price: "₹11,499", img: "https://i0.wp.com/taalmusicals.in/wp-content/uploads/2024/05/DOLPHIN-VIOLIN-1-DV-001.png?fit=1600%2C1600&quality=80&ssl=1" },
+      { name: "Violin 2", price: "₹8,999", img: "https://images.pexels.com/photos/3120109/pexels-photo-3120109.jpeg?cs=srgb&dl=pexels-fotograf-jylland-1557004-3120109.jpg&fm=jpg" },
+      { name: "Violin 3", price: "₹9,500", img: "https://rukminim2.flixcart.com/image/850/1000/xif0q/violin/f/a/z/voilin-with-all-kit-regeira-original-imagxyh9dxb5grma.jpeg?q=90&crop=false" },
+      { name: "Violin 4", price: "₹12,750", img: "https://5.imimg.com/data5/BM/SO/MG/SELLER-5779806/imported-violin-for-sale.jpg" },
+      { name: "Violin 5", price: "₹7,600", img: "https://m.media-amazon.com/images/I/61y5BSdCbBL._AC_UF1000,1000_QL80_.jpg" },
+      { name: "Violin 6", price: "₹5,999", img: "https://m.media-amazon.com/images/I/41D-IuaQejL._AC_UF350,350_QL80_.jpg" },
+      { name: "Violin 7", price: "₹14,300", img: "https://i.ebayimg.com/thumbs/images/g/ahMAAeSwh~hn5z2k/s-l1200.jpg" },
+      { name: "Violin 8", price: "₹10,250", img: "https://www.manchestermusiconline.com/wp-content/uploads/2024/07/Photo-Feb-04-2023-10-57-55-AM-scaled.jpg" },
+      { name: "Violin 9", price: "₹13,200", img: "https://bajaao-connect-public-production.s3.ap-south-1.amazonaws.com/lWnUg9DtZaIGtF0yYeThV" },
+      { name: "Violin 10", price: "₹15,999", img: "https://image.made-in-china.com/2f0j00BkUbplAtZIoS/Chinese-Best-Selling-Solid-Wood-Electric-Violins-for-Sale.jpg" },
+      { name: "Violin 11", price: "₹22,000", img: "https://www.scmusic.com.au/content/uploads/2024/09/ae-smith-violin-scmusic.jpg" },
+      { name: "Violin 12", price: "₹18,990", img: "https://kadence.in/wp-content/uploads/2024/02/g-1.jpg" }
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const cartCount = document.getElementById("cartCount");
+    let cart = 0;
+
+    violins.forEach((violin, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.innerHTML = `
+        <img src="${violin.img}" alt="${violin.name}" />
+        <h3>${violin.name}</h3>
+        <p>${violin.price}</p>
+        <button class="buy" onclick="window.location.href='buynow.html?from=violin'">Buy Now</button>
+        <button class="add" onclick="addToCart()">Add to Cart</button>
+      `;
+      gallery.appendChild(card);
+    });
+
+    
+
+    function addToCart() {
+      cart++;
+      cartCount.textContent = cart;
+      playCartSound();
+    }
+
+    function playCartSound() {
+      const sound = document.getElementById('cartSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+  </script>
+</body>
+</html>

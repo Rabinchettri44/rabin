@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guitar Gallery</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff6f6, #e6e6fa);
+      border: 12px solid;
+      border-image: linear-gradient(to right, black, red, yellow) 1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 1.2rem 2rem;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      margin: 0 auto;
+      font-size: 2rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .cart {
+      font-size: 1.2rem;
+      cursor: pointer;
+      position: relative;
+      margin-left: auto;
+    }
+
+    .cart span {
+      position: absolute;
+      top: -10px;
+      right: -15px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+    }
+
+    .gallery-title {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 3rem;
+      color: #333;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff8a00; }
+      to { text-shadow: 0 0 20px #ff0080; }
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      animation: flyIn 1s ease forwards;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: scale(1.07);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0.5rem 0;
+      color: #333;
+    }
+
+    .card p {
+      color: #777;
+      font-weight: bold;
+    }
+
+    .card button {
+      margin: 0.3rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .buy {
+      background: #ff8a00;
+      color: white;
+    }
+
+    .buy:hover {
+      background: #e67300;
+    }
+
+    .add {
+      background: #00b894;
+      color: white;
+    }
+
+    .add:hover {
+      background: #00997a;
+    }
+
+    @keyframes flyIn {
+      0% {
+        transform: translateY(200px) rotate(90deg);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .back-button {
+      position: fixed;
+      top: 90px;
+      left: 20px;
+      z-index: 999;
+      background: linear-gradient(to right, #ff8a00, #ff0080);
+      color: white;
+      font-size: 1.1rem;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: pulse 1.5s infinite;
+    }
+
+    .back-button:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #ff8a00; }
+      50% { box-shadow: 0 0 20px #ff0080; }
+      100% { box-shadow: 0 0 10px #ff8a00; }
+    }
+
+    .rating {
+      margin: 0.5rem 0;
+      color: gold;
+    }
+
+    .expanded-card {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 2rem;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 101;
+      display: none;
+      transition: all 0.3s ease;
+    }
+
+    .expanded-card img {
+      height: 300px;
+    }
+
+    .expanded-card h3 {
+      font-size: 1.5rem;
+    }
+
+    .expanded-card p {
+      color: #333;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <audio id="cartSound" src="cart-sound.mp3" preload="auto"></audio>
+
+  <button class="back-button" onclick="window.location.href='index.html'">🎵 Back</button>
+
+  <div class="header">
+    <h1>🎸 Guitar Gallery</h1>
+    <div class="cart" onclick="playCartSound()">
+      🛒 Cart <span id="cartCount">0</span>
+    </div>
+  </div>
+
+  <h2 class="gallery-title">Explore Our Guitar Collection</h2>
+
+  <div class="gallery" id="gallery"></div>
+
+  <div id="expandedCard" class="expanded-card">
+    <button class="close-button" onclick="closeExpandedCard()">X</button>
+    <img id="expandedCardImg" src="" alt="">
+    <h3 id="expandedCardName"></h3>
+    <p id="expandedCardPrice"></p>
+    <p id="expandedCardDesc"></p>
+    <div id="expandedCardRating" class="rating"></div>
+    <button class="buy" onclick="window.location.href='buynow.html?from=guitar'">Buy Now</button>
+    <button class="add" onclick="addToCart()">Add to Cart</button>
+  </div>
+
+  <script>
+    const guitars = [
+      { name: "Hertz LP Custom", price: "₹29,999", img: "https://vibemusic.in/wp-content/uploads/2024/07/Hertz-LP-Custom-Electric-Guitar-FM.jpeg", description: "A classic LP style electric guitar with a rich sound.", rating: 4 },
+      { name: "Vintage Rock", price: "₹24,500", img: "https://images.unsplash.com/photo-1511379938547-c1f69419868d", description: "A vintage-inspired guitar with a rock vibe.", rating: 5 },
+      { name: "Slowhand Black", price: "₹19,999", img: "https://kadence.in/wp-content/uploads/2024/01/Slow-hand-Guitar-Black-guitar.jpg", description: "A sleek black guitar, perfect for shredding.", rating: 3 },
+      { name: "Vault RG7", price: "₹31,000", img: "https://www.bajaao.com/cdn/shop/files/vault-electric-guitars-matte-black-vault-rg7-seven-string-electric-guitar-34568301871283.png", description: "A seven-string guitar for the modern guitarist.", rating: 5 },
+      { name: "Classic Evolution", price: "₹22,250", img: "https://www.mi.edu/wp-content/uploads/2018/12/Guitar-History-How-the-Guitar-has-Evolved-1080x675.jpg", description: "A classic evolution with a unique twist.", rating: 4 },
+      { name: "Kadence 12 String", price: "₹35,990", img: "https://kadence.in/wp-content/uploads/2023/08/Kadence-12-strings-Slowhand-Premium-Black-Spruce-wood-Semi-Acoustic-Guitar-KSH04-12EQ-1.jpg", description: "A 12-string guitar for a richer sound.", rating: 5 },
+      { name: "Vintage V6", price: "₹27,999", img: "https://www.guitarbitz.com/cdn/shop/products/V6MRSSB.jpg", description: "A vintage guitar with modern playability.", rating: 4 },
+      { name: "Rockstar Flame", price: "₹21,250", img: "https://i.pinimg.com/564x/59/b0/eb/59b0ebc9150caa55cf103367424ae2cc.jpg", description: "A fiery guitar that delivers the heat.", rating: 3 },
+      { name: "Studio Shredder", price: "₹18,000", img: "https://rvb-img.reverb.com/image/upload/s--pQNYa7eX--/f_auto,t_large/v1720678934/mwjxzj97njajg7nvcgyh.jpg", description: "The ultimate shredder guitar for metal players.", rating: 4 },
+      { name: "Med Black Acoustic", price: "₹16,500", img: "https://rukminim2.flixcart.com/image/850/1000/xif0q/acoustic-guitar/d/h/2/med-black-acoustic-guitar-piybha-store-original-imagjsagwxz6xhba.jpeg", description: "An acoustic guitar with a dark and bold sound.", rating: 2 },
+      { name: "Ibanez Custom", price: "₹40,000", img: "https://www.ibanez.com/common/product_artist_file/file/pc_main_electric_guitars_na.jpg", description: "A custom Ibanez guitar with premium features.", rating: 5 },
+      { name: "Pixie Special", price: "₹38,500", img: "https://www.intersoundguitars.co.uk/wp/wp-content/uploads/2023/01/pixie_1673453095024.png", description: "A special edition guitar with unique design.", rating: 5 }
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const cartCount = document.getElementById("cartCount");
+    let cart = 0;
+
+    guitars.forEach((guitar, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.innerHTML = `
+        <img src="${guitar.img}" alt="${guitar.name}" />
+        <h3>${guitar.name}</h3>
+        <p>${guitar.price}</p>
+        <div class="rating">${'⭐'.repeat(guitar.rating)}</div>
+        <button class="buy" onclick="window.location.href='buynow.html?from=guitar'">Buy Now</button>
+        <button class="add" onclick="addToCart()">Add to Cart</button>
+      `;
+      card.onclick = () => openExpandedCard(guitar);
+      gallery.appendChild(card);
+    });
+
+    function addToCart() {
+      cart++;
+      cartCount.textContent = cart;
+      playCartSound();
+    }
+
+    function playCartSound() {
+      const sound = document.getElementById('cartSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    function openExpandedCard(guitar) {
+      const expandedCard = document.getElementById('expandedCard');
+      document.getElementById('expandedCardImg').src = guitar.img;
+      document.getElementById('expandedCardName').textContent = guitar.name;
+      document.getElementById('expandedCardPrice').textContent = guitar.price;
+      document.getElementById('expandedCardDesc').textContent = guitar.description;
+      document.getElementById('expandedCardRating').textContent = '⭐'.repeat(guitar.rating);
+      expandedCard.style.display = 'block';
+    }
+
+    function closeExpandedCard() {
+      document.getElementById('expandedCard').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

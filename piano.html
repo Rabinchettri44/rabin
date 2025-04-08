@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Piano Gallery</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff6f6, #e6e6fa);
+      border: 12px solid;
+      border-image: linear-gradient(to right, black, red, yellow) 1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #222;
+      padding: 1.2rem 2rem;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      margin: 0 auto;
+      font-size: 2rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .cart {
+      font-size: 1.2rem;
+      cursor: pointer;
+      position: relative;
+      margin-left: auto;
+    }
+
+    .cart span {
+      position: absolute;
+      top: -10px;
+      right: -15px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+    }
+
+    .gallery-title {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 3rem;
+      color: #333;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff8a00; }
+      to { text-shadow: 0 0 20px #ff0080; }
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      animation: flyIn 1s ease forwards;
+    }
+
+    .card:hover {
+      transform: scale(1.07);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0.5rem 0;
+      color: #333;
+    }
+
+    .card p {
+      color: #777;
+      font-weight: bold;
+    }
+
+    .card button {
+      margin: 0.3rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .buy {
+      background: #ff8a00;
+      color: white;
+    }
+
+    .buy:hover {
+      background: #e67300;
+    }
+
+    .add {
+      background: #00b894;
+      color: white;
+    }
+
+    .add:hover {
+      background: #00997a;
+    }
+
+    @keyframes flyIn {
+      0% {
+        transform: translateY(200px) rotate(90deg);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .back-button {
+      position: fixed;
+      top: 90px;
+      left: 20px;
+      z-index: 999;
+      background: linear-gradient(to right, #ff8a00, #ff0080);
+      color: white;
+      font-size: 1.1rem;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: pulse 1.5s infinite;
+    }
+
+    .back-button:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #ff8a00; }
+      50% { box-shadow: 0 0 20px #ff0080; }
+      100% { box-shadow: 0 0 10px #ff8a00; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="cartSound" src="cart-sound.mp3" preload="auto"></audio>
+
+  <button class="back-button" onclick="window.location.href='index.html'">🎵 Back</button>
+
+  <div class="header">
+    <h1>🎹 Piano Gallery</h1>
+    <div class="cart" onclick="playCartSound()">
+      🛒 Cart <span id="cartCount">0</span>
+    </div>
+  </div>
+
+  <h2 class="gallery-title">Explore Our Piano Collection</h2>
+
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    const pianos = [
+      { name: "Classic Upright", price: "₹55,000", img: "https://keyboardconcepts.com/wp-content/uploads/2020/02/Sell-us-your-piano.jpg" },
+      { name: "Elegant Studio", price: "₹64,999", img: "https://millersmusic.co.uk/cdn/shop/articles/Untitled_design_94.png?v=1652444639" },
+      { name: "Yamaha U1", price: "₹80,000", img: "https://i0.wp.com/worldwidepianostores.com/wp-content/uploads/2021/01/yamaha-u1-piano.jpg?resize=720%2C720&ssl=1" },
+      { name: "Steinway S Grand", price: "₹1,20,000", img: "https://www.chuppspianos.com/wp-content/uploads/2015/10/SteinwayModelSGrandPiano.jpg" },
+      { name: "Bentley DE-285", price: "₹88,000", img: "https://www.eshelbypianos.com/wp-content/uploads/2023/06/DE-285-Bentley-2.jpg" },
+      { name: "Seasonal Buy", price: "₹73,000", img: "https://www.pianogallery.com/wp-content/uploads/2019/06/When-is-the-Best-Time-of-Year-to-Buy-a-Piano.jpg" },
+      { name: "Digital Q58", price: "₹47,500", img: "https://bajaao-connect-public-production.s3-ap-south-1.amazonaws.com/Q58DRJziLRE9KoAGhjoE" },
+      { name: "U-Mich Keyboard", price: "₹51,000", img: "https://smtd.umich.edu/wp-content/uploads/2022/07/piano-keyboard-britton-scaled.jpg" },
+      { name: "Steinway M-57", price: "₹99,500", img: "https://hendersonmusic.com/wp-content/uploads/Steinway-Model-M-57-Grand-Piano-For-Sale-in-Cincinnati.jpg" },
+      { name: "Baby Grand M", price: "₹1,10,000", img: "https://pianony.com/wp-content/uploads/2023/07/Steinway-Sons-M-Baby-Grand.jpg.webp" },
+      { name: "Digital Piano Blueport", price: "₹45,000", img: "https://thumbs.dreamstime.com/b/digital-piano-sell-blueport-department-store-hua-hin-tha-photo-thailand-june-129701988.jpg" },
+      { name: "Estonia Performer", price: "₹1,25,000", img: "https://images.squarespace-cdn.com/content/v1/5b9d945bf793929c59e44b7d/1715210591636-FV4W85K8BKA1QS4PCFQ9/ESTONIA+-+1+%283%29.jpeg?format=1000w" }
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const cartCount = document.getElementById("cartCount");
+    let cart = 0;
+
+    pianos.forEach((piano, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.innerHTML = `
+        <img src="${piano.img}" alt="${piano.name}" />
+        <h3>${piano.name}</h3>
+        <p>${piano.price}</p>
+        <button class="buy" onclick="window.location.href='buynow.html?from=piano'">Buy Now</button>
+        <button class="add" onclick="addToCart()">Add to Cart</button>
+      `;
+      gallery.appendChild(card);
+    });
+
+    function addToCart() {
+      cart++;
+      cartCount.textContent = cart;
+      playCartSound();
+    }
+
+    function playCartSound() {
+      const sound = document.getElementById('cartSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+  </script>
+</body>
+</html>
